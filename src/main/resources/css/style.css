@@ -1,0 +1,24 @@
+/* style.css */
+.context-menu {
+    -fx-background-color: #fdfdfd;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1px;
+}
+
+.menu-item {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+     -fx-padding: 8px 60px 8px 56px;
+}
+
+.menu-item:hover {
+    -fx-background-color: #E4514C;
+    -fx-text-fill: white;
+}
+
+.report-menu {
+    -fx-background-color: #D7B928;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

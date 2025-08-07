@@ -1,0 +1,32 @@
+/* Background for the entire message center */
+.message-anchor {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20;
+}
+
+/* Header Label Styling */
+.header-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #343a40;
+}
+
+/* Table Styling */
+.message-table {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #dee2e6;
+    -fx-border-width: 1px;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-table-cell-border-color: #e9ecef;
+    -fx-selection-bar: #E4514C;
+    -fx-selection-bar-text: white;
+}
+
+/* Table Column Header Styling */
+.table-view .column-header {
+    -fx-background-color: #E4514C;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER-LEFT;
+}

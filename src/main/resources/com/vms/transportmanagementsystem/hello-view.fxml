@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="551.0" prefWidth="1074.0" style="-fx-background-color: #E4514C;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vms.transportmanagementsystem.HelloController">
+   <children>
+      <VBox prefHeight="551.0" prefWidth="231.0" style="-fx-background-color: #FFFFFF;">
+         <children>
+            <HBox prefHeight="138.0" prefWidth="231.0" />
+            <HBox prefHeight="47.0" prefWidth="231.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#openVehicleTab" prefHeight="59.0" prefWidth="231.0" text="Vehicle" />
+               </children>
+            </HBox>
+            <HBox prefHeight="48.0" prefWidth="231.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#openDriverTab" prefHeight="48.0" prefWidth="236.0" text="Drivers" />
+               </children>
+            </HBox>
+            <HBox prefHeight="49.0" prefWidth="231.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#openMaintenanceTab" prefHeight="49.0" prefWidth="237.0" text="Maintenance" />
+               </children>
+            </HBox>
+            <HBox prefHeight="46.0" prefWidth="231.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#openFuelTab" prefHeight="49.0" prefWidth="231.0" text="Fuel" />
+               </children>
+            </HBox>
+            <HBox prefHeight="46.0" prefWidth="231.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#openFuelViewTab" prefHeight="49.0" prefWidth="231.0" text="Fuel view" />
+               </children>
+            </HBox>
+            <HBox prefHeight="46.0" prefWidth="231.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#openMessageTab" prefHeight="46.0" prefWidth="231.0" text="Message" />
+               </children>
+            </HBox>
+            <HBox prefHeight="48.0" prefWidth="231.0">
+               <children>
+                  <MenuButton layoutX="150" layoutY="330" prefHeight="48.0" prefWidth="233.0" text="Report ">
+                     <items>
+                        <MenuItem text="Fuel Report"  onAction="#handleFuelReport"/>
+                        <MenuItem text="Weekly Report" />
+                        <MenuItem text="Monthly Report" />
+<!--                        <MenuItem text="Custom Report" onAction="#handleCustomReport"/>-->
+                     </items>
+                  </MenuButton>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox layoutX="240.0" layoutY="61.0" prefHeight="137.0" prefWidth="266.0" style="-fx-background-color: #FFFFFF;" />
+      <VBox layoutX="-3.0" layoutY="-1.0" prefHeight="26.0" prefWidth="1086.0" style="-fx-background-color: #D7B928;" />
+
+   </children>
+</AnchorPane>
