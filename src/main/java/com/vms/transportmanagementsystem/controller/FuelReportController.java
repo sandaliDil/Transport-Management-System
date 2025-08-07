@@ -35,34 +35,6 @@ public class FuelReportController {
         vehicleCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVehicleRegNum()));
     }
 
-
-//    @FXML
-//    private void onGeneratePivotReport() {
-//        LocalDate start = startDatePicker.getValue();
-//        LocalDate end = endDatePicker.getValue();
-//
-//        if (start == null || end == null || end.isBefore(start)) {
-//            showAlert("Select a valid start and end date.");
-//            return;
-//        }
-//
-//        // ✅ Assign to class-level field
-//        dateList = start.datesUntil(end.plusDays(1)).toList();
-//
-//        pivotTable.getColumns().clear();
-//        pivotTable.getColumns().add(vehicleCol); // re-add the fixed column
-//
-//        for (LocalDate date : dateList) {
-//            TableColumn<FuelPivotRow, Float> dateCol = new TableColumn<>(date.toString());
-//            dateCol.setCellValueFactory(data -> data.getValue().quantityProperty(date).asObject());
-//            pivotTable.getColumns().add(dateCol);
-//        }
-//
-//        List<FuelPivotRow> rows = fuelService.getPivotReport(start, end, dateList);
-//        pivotTable.setItems(FXCollections.observableArrayList(rows));
-//    }
-
-
     @FXML
     private void onGeneratePivotReport() {
         LocalDate start = startDatePicker.getValue();

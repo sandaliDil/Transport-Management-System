@@ -13,7 +13,7 @@ public class FuelRepository {
 
 
     public void saveFuel(Fuel fuel) {
-        String sql = "INSERT INTO fuel (vehicle_id, fuel_type, date, per_mileage, post_mileage, quantity) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO fuel (vehicle_id, fuel_type, date, per_mileage, post_mileage, quantity, fuel_station) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -24,6 +24,7 @@ public class FuelRepository {
             stmt.setFloat(4, fuel.getPerMileage());
             stmt.setFloat(5, fuel.getPostMileage());
             stmt.setFloat(6, fuel.getQuantity());
+            stmt.setString(7, fuel.getFuelStation());
 
             stmt.executeUpdate();
         } catch (Exception e) {
@@ -31,10 +32,11 @@ public class FuelRepository {
         }
     }
 
+
     public List<Fuel> getAllFuels() {
         List<Fuel> list = new ArrayList<>();
         String sql = """
-            SELECT f.fuel_id, v.registration_num, f.fuel_type, f.date, f.per_mileage, f.post_mileage, f.quantity
+            SELECT f.fuel_id, v.registration_num, f.fuel_type, f.date, f.per_mileage, f.post_mileage, f.quantity, f.fuel_station
             FROM fuel f
             JOIN vehicle v ON f.vehicle_id = v.vehicle_id
         """;
@@ -52,6 +54,7 @@ public class FuelRepository {
 
                 fuel.setFuelId(rs.getInt("fuel_id"));
                 fuel.setFuelType(rs.getString("fuel_type"));
+                fuel.setFuelStation(rs.getString("fuel_station"));
                 fuel.setDate(rs.getDate("date").toLocalDate());
                 fuel.setPerMileage( rs.getFloat("per_mileage"));
                 fuel.setPostMileage( rs.getFloat("post_mileage"));

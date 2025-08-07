@@ -27,6 +27,8 @@ public class FuelViewController {
     public TableColumn<Fuel, Float> colPerMileage;
     public TableColumn<Fuel, Float> colPostMileage;
     public TableColumn<Fuel, Float> quantity;
+    public TableColumn<Fuel, String> fuelStation;
+
     @FXML
     private javafx.scene.control.TextField searchField;
     private ObservableList<Fuel> masterData = FXCollections.observableArrayList();
@@ -99,6 +101,7 @@ public class FuelViewController {
         colPerMileage.setCellValueFactory(new PropertyValueFactory<>("perMileage"));
         colPostMileage.setCellValueFactory(new PropertyValueFactory<>("postMileage"));
         quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        fuelStation.setCellValueFactory(new PropertyValueFactory<>("fuelStation"));
 
     }
 

@@ -3,7 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="451.0" prefWidth="794.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vms.vehicle_management_system.controller.FuelViewController">
+<AnchorPane prefHeight="451.0" prefWidth="794.0" xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vms.transportmanagementsystem.controller.FuelViewController">
     <TextField fx:id="searchField" promptText="Search by Registration Number" />
 
     <TableView fx:id="fuelTable" layoutX="14.0" layoutY="110.0" prefHeight="274.0" prefWidth="712.0">
@@ -14,7 +15,7 @@
             <TableColumn fx:id="colPerMileage" prefWidth="130" text="Before Mileage" />
             <TableColumn fx:id="colPostMileage" prefWidth="130" text="After Mileage" />
             <TableColumn fx:id="quantity" prefWidth="130" text="Quantity" />
-
+            <TableColumn fx:id="fuelStation" prefWidth="130" text="Fuel Station" />
         </columns>
     </TableView>
     <Pagination fx:id="pagination" layoutX="4.0" layoutY="101.0" prefHeight="336.0" prefWidth="745.0" />

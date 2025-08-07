@@ -12,7 +12,6 @@ public class Fuel {
     private float postMileage;
     private float quantity;
     private Vehicle vehicle;
-
     public Vehicle getVehicle() {
         return vehicle;
     }
@@ -20,16 +19,29 @@ public class Fuel {
         this.vehicle = vehicle;
     }
 
+    private String fuelStation;
+
+    public String getFuelStation() {
+        return fuelStation;
+    }
+
+    public void setFuelStation(String fuelStation) {
+        this.fuelStation = fuelStation;
+    }
+
     public Fuel() {}
 
-    public Fuel(int fuelId, int vehicleId, String fuelType, LocalDate date, float perMileage, float postMileage, float quantity) {
-        this.fuelId = fuelId;
-        this.vehicleId = vehicleId;
-        this.fuelType = fuelType;
-        this.date = date;
-        this.perMileage = perMileage;
-        this.postMileage = postMileage;
+    public Fuel(String fuelStation, float quantity, Vehicle vehicle, float postMileage, float perMileage,
+                LocalDate date, String fuelType, int vehicleId, int fuelId) {
+        this.fuelStation = fuelStation;
         this.quantity = quantity;
+        this.vehicle = vehicle;
+        this.postMileage = postMileage;
+        this.perMileage = perMileage;
+        this.date = date;
+        this.fuelType = fuelType;
+        this.vehicleId = vehicleId;
+        this.fuelId = fuelId;
     }
 
     // Getters and Setters

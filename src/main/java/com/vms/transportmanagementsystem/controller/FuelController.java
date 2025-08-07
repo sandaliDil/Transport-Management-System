@@ -1,6 +1,5 @@
 package com.vms.transportmanagementsystem.controller;
 
-
 import com.vms.transportmanagementsystem.enitiy.Fuel;
 import com.vms.transportmanagementsystem.enitiy.Vehicle;
 import com.vms.transportmanagementsystem.service.FuelService;
@@ -30,6 +29,9 @@ public class FuelController {
     private TextField postMileageField;
     @FXML
     private TextField quantityField;
+    @FXML
+    private ComboBox<String> fuelStationField;
+
 
     private final FuelService fuelService = new FuelService();
     private final VehicleService vehicleService = new VehicleService();
@@ -38,12 +40,19 @@ public class FuelController {
     public void initialize() {
         loadVehicles();
         loadFuelTypes();
+        setFuelStations();
     }
 
     private void loadFuelTypes() {
         ObservableList<String> fuelTypes = FXCollections.observableArrayList("Diesel", "Petrol");
         fuelTypeField.setItems(fuelTypes);
     }
+
+    private void setFuelStations() {
+        ObservableList<String> stations = FXCollections.observableArrayList("Retiyala", "Kandana");
+        fuelStationField.setItems(stations);
+    }
+
 
     private void loadVehicles() {
         List<Vehicle> vehicles = vehicleService.getAllVehicles();
@@ -82,6 +91,13 @@ public class FuelController {
             fuel.setPerMileage(Float.parseFloat(perMileageField.getText()));
             fuel.setPostMileage(Float.parseFloat(postMileageField.getText()));
             fuel.setQuantity(Float.parseFloat(quantityField.getText()));
+            String pickupLocation = fuelStationField.getSelectionModel().getSelectedItem();
+            if (pickupLocation == null) {
+                showAlert("Validation Error", "Please select a fuel pick-up location.");
+                return;
+            }
+            fuel.setFuelStation(pickupLocation);
+
 
             fuelService.saveFuel(fuel);
             showAlert("Success", "Fuel record saved successfully.");
@@ -99,6 +115,8 @@ public class FuelController {
         perMileageField.clear();
         postMileageField.clear();
         quantityField.clear();
+        fuelStationField.getSelectionModel().clearSelection();
+
     }
 
     private void showAlert(String title, String content) {
