@@ -115,7 +115,7 @@ public class FuelController {
         perMileageField.clear();
         postMileageField.clear();
         quantityField.clear();
-        fuelStationField.getSelectionModel().clearSelection();
+        fuelTypeField.getSelectionModel().clearSelection();  // ✅ keeps items
 
     }
 

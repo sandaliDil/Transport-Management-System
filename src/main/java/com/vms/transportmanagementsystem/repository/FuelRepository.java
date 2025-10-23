@@ -70,19 +70,136 @@ public class FuelRepository {
 
         return list;
     }
-    public Map<String, Map<LocalDate, Float>> getFuelQuantityGroupedByVehicleAndDate(LocalDate start, LocalDate end) {
-        Map<String, Map<LocalDate, Float>> result = new HashMap<>();
 
-        String query = "SELECT v.registration_num, f.date, SUM(f.quantity) as total_quantity " +
-                "FROM fuel f JOIN vehicle v ON f.vehicle_id = v.vehicle_id " +
-                "WHERE f.date BETWEEN ? AND ? " +
-                "GROUP BY v.registration_num, f.date";
+    public List<String> getDistinctVehicleNumbers() {
+        List<String> vehicles = new ArrayList<>();
+        String query = "SELECT DISTINCT v.registration_num FROM fuel f JOIN vehicle v ON f.vehicle_id = v.vehicle_id ORDER BY v.registration_num";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                vehicles.add(rs.getString("registration_num"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return vehicles;
+    }
+
+    public List<Object[]> getMonthlyFuelEfficiency(LocalDate start, LocalDate end) {
+        List<Object[]> results = new ArrayList<>();
+
+        String sql = """
+        SELECT v.registration_num,
+               YEAR(f.date) AS year,
+               MONTH(f.date) AS month,
+               SUM(f.quantity) AS total_liters,
+               SUM(f.post_mileage - f.per_mileage) AS total_distance
+        FROM fuel f
+        JOIN vehicle v ON f.vehicle_id = v.vehicle_id
+        WHERE f.date BETWEEN ? AND ?
+        GROUP BY v.registration_num, YEAR(f.date), MONTH(f.date)
+        ORDER BY v.registration_num, year, month
+    """;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setDate(1, Date.valueOf(start));
             stmt.setDate(2, Date.valueOf(end));
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String regNum = rs.getString("registration_num");
+                int year = rs.getInt("year");
+                int month = rs.getInt("month");
+                float liters = rs.getFloat("total_liters");
+                float distance = rs.getFloat("total_distance");
+                float efficiency = liters == 0 ? 0 : roundToThreeDecimals(distance / liters);
+
+                results.add(new Object[]{regNum, year, month, liters, distance, efficiency});
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return results;
+    }
+
+    public List<Fuel> findByDateBetween(LocalDate start, LocalDate end) {
+        List<Fuel> fuels = new ArrayList<>();
+
+        String sql = "SELECT f.fuel_id, f.vehicle_id, f.fuel_type, f.date, f.per_mileage, f.post_mileage, f.quantity, f.fuel_station " +
+                "FROM fuel f WHERE f.date BETWEEN ? AND ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDate(1, Date.valueOf(start));
+            stmt.setDate(2, Date.valueOf(end));
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Fuel fuel = new Fuel();
+                fuel.setFuelId(rs.getInt("fuel_id"));
+                fuel.setVehicleId(rs.getInt("vehicle_id"));
+                fuel.setFuelType(rs.getString("fuel_type"));
+                fuel.setDate(rs.getDate("date").toLocalDate());
+                fuel.setPerMileage(rs.getFloat("per_mileage"));
+                fuel.setPostMileage(rs.getFloat("post_mileage"));
+                fuel.setQuantity(rs.getFloat("quantity"));
+                fuel.setFuelStation(rs.getString("fuel_station"));
+
+                fuels.add(fuel);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return fuels;
+    }
+
+
+
+
+    public Map<String, Map<LocalDate, Float>> getFuelQuantityGroupedByVehicleAndDate(LocalDate start, LocalDate end, String fuelStation, String vehicleRegNum) {
+        Map<String, Map<LocalDate, Float>> result = new HashMap<>();
+
+        StringBuilder query = new StringBuilder(
+                "SELECT v.registration_num, f.date, SUM(f.quantity) as total_quantity " +
+                        "FROM fuel f JOIN vehicle v ON f.vehicle_id = v.vehicle_id " +
+                        "WHERE f.date BETWEEN ? AND ? "
+        );
+
+        if (fuelStation != null) {
+            query.append("AND f.fuel_station = ? ");
+        }
+        if (vehicleRegNum != null) {
+            query.append("AND v.registration_num = ? ");
+        }
+
+        query.append("GROUP BY v.registration_num, f.date");
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query.toString())) {
+
+            stmt.setDate(1, Date.valueOf(start));
+            stmt.setDate(2, Date.valueOf(end));
+            int index = 3;
+            if (fuelStation != null) {
+                stmt.setString(index++, fuelStation);
+            }
+            if (vehicleRegNum != null) {
+                stmt.setString(index, vehicleRegNum);
+            }
+
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -99,6 +216,25 @@ public class FuelRepository {
 
         return result;
     }
+
+
+    public List<String> getDistinctFuelStations() {
+        List<String> stations = new ArrayList<>();
+        String query = "SELECT DISTINCT fuel_station FROM fuel ORDER BY fuel_station";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                stations.add(rs.getString("fuel_station"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return stations;
+    }
+
     private float roundToThreeDecimals(float value) {
         return (float) (Math.round(value * 1000.0) / 1000.0);
     }

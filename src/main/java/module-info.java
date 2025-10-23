@@ -14,10 +14,12 @@ module com.vms.transportmanagementsystem {
     requires mysql.connector.j;
     requires org.apache.poi.ooxml;
     requires itextpdf;
+    requires org.apache.poi.poi;
 
 
     opens com.vms.transportmanagementsystem.enitiy to javafx.base, javafx.fxml;
     opens com.vms.transportmanagementsystem.controller to javafx.fxml;
+    opens com.vms.transportmanagementsystem.DTO to javafx.base, javafx.fxml;
     opens com.vms.transportmanagementsystem to javafx.fxml;
     exports com.vms.transportmanagementsystem;
 }

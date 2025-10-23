@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.vms.transportmanagementsystem.controller.FuelReportController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="464.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vms.transportmanagementsystem.controller.FuelReportController">
 
-    <VBox spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10">
-        <HBox spacing="10">
-            <Label text="Start Date:"/>
-            <DatePicker fx:id="startDatePicker"/>
-            <Label text="End Date:"/>
-            <DatePicker fx:id="endDatePicker"/>
-            <Button text="Generate Report" onAction="#onGeneratePivotReport"/>
-            <Button text="Export to Excel" onAction="#onExportToExcel"/>
-            <Button text="Export to PDF" onAction="#onExportToPDF"/>
+    <VBox spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
+        <HBox prefHeight="68.0" prefWidth="1195.0" spacing="10">
+            <Label text="Start Date:" />
+            <DatePicker fx:id="startDatePicker" />
+            <Label text="End Date:" />
+            <DatePicker fx:id="endDatePicker" />
+            <Button onAction="#onGeneratePivotReport" text="Generate Report" />
+            <Button onAction="#onExportToExcel" text="Export to Excel" />
+            <Button onAction="#onExportToPDF" text="Export to PDF" />
+            <ComboBox fx:id="fuelStationComboBox" promptText="Select Fuel Station" />
+            <ComboBox fx:id="vehicleComboBox" promptText="Select Vehicle"/>
+
         </HBox>
 
-        <TableView fx:id="pivotTable" prefHeight="500">
+        <TableView fx:id="pivotTable" prefHeight="348.0" prefWidth="1195.0">
             <columns>
-                <TableColumn fx:id="vehicleCol" text="Vehicle Reg. No." prefWidth="150"/>
+                <TableColumn fx:id="vehicleCol" prefWidth="150" text="Vehicle Reg. No." />
             </columns>
         </TableView>
     </VBox>

@@ -12,6 +12,16 @@ public class FuelPivotRow {
     private final SimpleStringProperty vehicleRegNum = new SimpleStringProperty();
     private final Map<LocalDate, SimpleFloatProperty> dateToQuantity = new HashMap<>();
     private final FloatProperty totalQuantity = new SimpleFloatProperty(0f);
+    private String fuelStation;
+
+    public String getFuelStation() {
+        return fuelStation;
+    }
+
+    public void setFuelStation(String fuelStation) {
+        this.fuelStation = fuelStation;
+    }
+
 
     // Constructor
     public FuelPivotRow(String regNum) {

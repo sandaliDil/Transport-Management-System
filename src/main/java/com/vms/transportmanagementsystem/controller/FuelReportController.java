@@ -7,10 +7,7 @@ import com.vms.transportmanagementsystem.utill.PDFExportUtil;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
@@ -26,13 +23,33 @@ public class FuelReportController {
     @FXML private DatePicker endDatePicker;
     @FXML private TableView<FuelPivotRow> pivotTable;
     @FXML private TableColumn<FuelPivotRow, String> vehicleCol;
-//    private List<LocalDate> dateList;
+    @FXML private ComboBox<String> fuelStationComboBox;
+    @FXML private javafx.scene.control.ComboBox<String> vehicleComboBox;
+    // Add "Total" column with custom cell factory
+    TableColumn<FuelPivotRow, Float> totalCol = new TableColumn<>("Total");
+
+
+    //    private List<LocalDate> dateList;
     private final FuelService fuelService = new FuelService();
     private List<LocalDate> dateList = new ArrayList<>();
 
     @FXML
     public void initialize() {
         vehicleCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVehicleRegNum()));
+        vehicleCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getVehicleRegNum()));
+
+        // Load distinct fuel stations into ComboBox
+        List<String> stations = fuelService.getDistinctFuelStations();
+        fuelStationComboBox.getItems().add("All"); // Optional: show all fuel stations
+        fuelStationComboBox.getItems().addAll(stations);
+        fuelStationComboBox.getSelectionModel().selectFirst(); // Select "All" by default
+
+        // Load vehicles
+        List<String> vehicles = fuelService.getDistinctVehicleNumbers();
+        vehicleComboBox.getItems().add("All");
+        vehicleComboBox.getItems().addAll(vehicles);
+        vehicleComboBox.getSelectionModel().selectFirst();
+
     }
 
     @FXML
@@ -46,14 +63,22 @@ public class FuelReportController {
         }
 
         dateList = start.datesUntil(end.plusDays(1)).toList();
-
         pivotTable.getColumns().clear();
-        pivotTable.getColumns().add(vehicleCol); // Re-add vehicle column
+        pivotTable.getColumns().add(vehicleCol);
+
+        String selectedStation = fuelStationComboBox.getValue();
+        if ("All".equals(selectedStation)) {
+            selectedStation = null;
+        }
+
+        String selectedVehicle = vehicleComboBox.getValue();
+        if ("All".equals(selectedVehicle)) {
+            selectedVehicle = null;
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd");
 
-        // Fetch data rows
-        List<FuelPivotRow> rows = fuelService.getPivotReport(start, end, dateList);
+        List<FuelPivotRow> rows = fuelService.getPivotReport(start, end, dateList, selectedStation, selectedVehicle);
 
         // Cell factory for formatting floats with optional decimals
         StringConverter<Float> floatStringConverter = new StringConverter<Float>() {
@@ -130,6 +155,49 @@ public class FuelReportController {
 
         // Set items to the table
         pivotTable.setItems(FXCollections.observableArrayList(rows));
+
+        pivotTable.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(FuelPivotRow item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setStyle("");
+                } else if ("TOTAL".equalsIgnoreCase(item.getVehicleRegNum())) {
+                    setStyle("-fx-background-color: #fce4ec; -fx-font-weight: bold;"); // Light pink row
+                } else {
+                    setStyle("");
+                }
+            }
+        });
+        totalCol.setCellFactory(column -> {
+            return new TextFieldTableCell<>(floatStringConverter) {
+                @Override
+                public void updateItem(Float item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (!empty) {
+                        setStyle("-fx-background-color: #e0f7fa; -fx-font-weight: bold;"); // Light cyan
+                    } else {
+                        setStyle("");
+                    }
+                }
+            };
+        });
+
+        vehicleCol.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (!empty) {
+                    setText(item);
+                    setStyle("-fx-alignment: CENTER; -fx-border-color: lightgray; -fx-border-width: 0 0 1 0;");
+                } else {
+                    setText(null);
+                    setStyle("");
+                }
+            }
+        });
+
+
     }
 
 
